@@ -1,26 +1,34 @@
 import React from 'react'
 import SliderModule from './SliderModule'
 
+const ws = new WebSocket('ws://192.168.4.22:80');
 
 class HomePage extends React.Component {
 
+
     constructor(props) {
+
         super(props)
         this.state = {
-            channel1: 0,
-            channel2: 0,
-            channel3: 0,
-            channel4:0
+            channelInputs: {
+                channel1: 0,
+                channel2: 0,
+                channel3: 0,
+                channel4: 0
+            }
         }
+
 
         this.sliderHandler = this.sliderHandler.bind(this)
     }
 
     sliderHandler(key, value) {
+        var inputs = this.state.channelInputs
+        inputs[key] = value
         this.setState({
-            [key]: value
+            channelInputs: inputs
         })
-        console.log(this.state)
+        ws.send(JSON.stringify(this.state.channelInputs))
     }
 
     render() {
@@ -38,6 +46,19 @@ class HomePage extends React.Component {
                 <SliderModule displayName = "Channel 2" tag = "channel2" handler = {this.sliderHandler}/>
                 <SliderModule displayName = "Channel 3" tag = "channel3" handler = {this.sliderHandler}/>
                 <SliderModule displayName = "Channel 4" tag = "channel4" handler = {this.sliderHandler}/>
+            </div>
+            <div 
+                style = {{
+                    background: this.state.color,
+                    width: 100,
+                    height: 100
+                }}
+                onClick={() => {
+                    console.log('clicked')
+                    ws.send("message", 123456)
+                }
+                }>
+                Click me to test the socket. If you can see something in the serial monitor then the socket is open.
             </div>
             </div>
 
