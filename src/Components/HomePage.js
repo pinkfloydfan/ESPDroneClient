@@ -28,7 +28,23 @@ class HomePage extends React.Component {
         this.setState({
             channelInputs: inputs
         })
-        ws.send(JSON.stringify(this.state.channelInputs))
+        // ws.send(JSON.stringify(this.state.channelInputs))
+        // cheeky idea:
+        var commandString = this.processJSON()
+        console.log(commandString)
+        if (ws.readyState == 1) {
+            ws.send(commandString)
+        } else {
+            console.log("websocket not open")
+        }
+
+
+    }
+
+    //dirty af
+    processJSON() {
+        var commandString = this.state.channelInputs.channel1 + ", " + this.state.channelInputs.channel2 + ", " + this.state.channelInputs.channel3 + ", " + this.state.channelInputs.channel4
+        return commandString
     }
 
     render() {
