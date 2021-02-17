@@ -24,7 +24,7 @@ class HomePage extends React.Component {
 
     sliderHandler(key, value) {
         var inputs = this.state.channelInputs
-        inputs[key] = value
+        inputs[key] = 1000 + (value/100)*1000
         this.setState({
             channelInputs: inputs
         })
@@ -41,9 +41,9 @@ class HomePage extends React.Component {
 
     }
 
-    //dirty af
+    //dirty af, added null character at end.
     processJSON() {
-        var commandString = this.state.channelInputs.channel1 + ", " + this.state.channelInputs.channel2 + ", " + this.state.channelInputs.channel3 + ", " + this.state.channelInputs.channel4
+        var commandString = this.state.channelInputs.channel1 + ", " + this.state.channelInputs.channel2 + ", " + this.state.channelInputs.channel3 + ", " + this.state.channelInputs.channel4 + "\0"
         return commandString
     }
 
