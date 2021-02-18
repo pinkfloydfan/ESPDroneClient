@@ -12,7 +12,7 @@ class SliderModule extends React.Component{
                 {this.props.displayName}
                 <Slider
                     orientation = "vertical"
-                    defaultValue = {0}
+                    defaultValue = {50}
                     onChange = {
                         (event, newValue) => {
                             this.props.handler(this.props.tag, newValue)
