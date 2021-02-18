@@ -10,12 +10,18 @@ class VideoDisplay extends React.Component {
                 }
             }>
 
-            <div>
-                aight this is supposed to be an abstraction of the video from the drone, need to decode this!
-            </div>
-            <div>
-                {this.props.imageString}
-            </div>
+                <div>
+                    aight this is supposed to be an abstraction of the video from the drone, need to decode this!
+                </div>
+                <div>
+                    {this.props.imageString}
+                </div>
+                <img src = {this.props.imageString} 
+                     style = {{
+                         width: 640, height: 480
+                     }}
+                
+                />
 
             </div>
         )
