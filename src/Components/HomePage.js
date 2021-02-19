@@ -20,10 +20,10 @@ class HomePage extends React.Component {
         //RC channel inputs from 0 to 100
         this.state = {
             channelInputs: {
-                channel1: 0,
-                channel2: 0,
-                channel3: 0,
-                channel4: 0
+                channel1: 1500,
+                channel2: 1500,
+                channel3: 1500,
+                channel4: 1500
             },
 
             //placeholder for image - NOPE NOPE NOPE
