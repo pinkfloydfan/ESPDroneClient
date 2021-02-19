@@ -1,5 +1,6 @@
 import React from 'react'
 
+//A brutally simple 'video display' that just displays a URL string passed to it as a prop.
 class VideoDisplay extends React.Component {
     render() {
         return(

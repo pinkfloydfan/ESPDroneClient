@@ -26,8 +26,7 @@ class HomePage extends React.Component {
                 channel4: 1500
             },
 
-            //placeholder for image - NOPE NOPE NOPE
-
+            //The current video frame, stored as a URL
             imageString: ''
         }
 
@@ -35,9 +34,13 @@ class HomePage extends React.Component {
         this.sliderHandler = this.sliderHandler.bind(this)
 
         ws.onmessage = function (event) {
-            //let's make a big assumption that event.data is a blob
+            //let's make a big assumption that event.data is a blob - this obviously won't work if `event` is anotherthing other than a blob
+            //this blob contains the raw binary of the image the ESP has just taken
             var rawBinary = []
+            //Formats the binary in an array that createObjectURL can take in
             rawBinary.push(event.data)
+            //Turns the array into a URL that React can then magically turn into an image
+            //N.B. Check if this induces a memory leak - are the URLs destroyed after a certain time?
             var url = URL.createObjectURL(new Blob(rawBinary, {type: 'image/jpeg'}))
             this.setState({
                 imageString: url
@@ -46,18 +49,19 @@ class HomePage extends React.Component {
     }
 
 
-
+    /* Function passed to the Slider component, which also contains the its key in this page's state
+    When this function is fired, it writes the new slider value to global state.*/
     sliderHandler(key, value) {
         var inputs = this.state.channelInputs
         inputs[key] = 1000 + (value/100)*1000
         this.setState({
             channelInputs: inputs
         })
-        // ws.send(JSON.stringify(this.state.channelInputs))
-        // cheeky idea:
+        //processJSON reads the relevant part of this component's state, and returns a simple string that is lighter to decode, i.e. not requiring a JSON parser on the microcontroller    
         var commandString = this.processJSON()
         console.log(commandString)
         if (ws.readyState == 1) {
+            //yeets the string over the airwaves
             ws.send(commandString)
         } else {
             console.log("websocket not open")
@@ -67,7 +71,7 @@ class HomePage extends React.Component {
     }
     /*
     simple function to read the channel values from the state of this component and turn them into a simple string a dumb C++ microcontroller can read.
-    Literally just joins them with commas and adds a null character at the end.
+    Literally just joins them with commas and adds a null character at the end so C++ doesn't complain.
     */
     processJSON() {
         var commandString = this.state.channelInputs.channel1 + ", " + this.state.channelInputs.channel2 + ", " + this.state.channelInputs.channel3 + ", " + this.state.channelInputs.channel4 + "\0"
